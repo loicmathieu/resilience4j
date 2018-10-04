@@ -114,7 +114,7 @@ public class RetryImpl implements Retry {
         private void throwOrSleepAfterException() throws Exception {
             int currentNumOfAttempts = numOfAttempts.incrementAndGet();
             Exception throwable = lastException.get();
-            if(currentNumOfAttempts >= maxAttempts){
+            if(currentNumOfAttempts >= maxAttempts && maxAttempts != RetryConfig.INFINITE_ATTEMPS){
                 failedAfterRetryCounter.increment();
                 publishRetryEvent(() -> new RetryOnErrorEvent(getName(), currentNumOfAttempts, throwable));
                 throw throwable;
@@ -126,7 +126,7 @@ public class RetryImpl implements Retry {
         private void throwOrSleepAfterRuntimeException(){
             int currentNumOfAttempts = numOfAttempts.incrementAndGet();
             RuntimeException throwable = lastRuntimeException.get();
-            if(currentNumOfAttempts >= maxAttempts){
+            if(currentNumOfAttempts >= maxAttempts && maxAttempts != RetryConfig.INFINITE_ATTEMPS){
                 failedAfterRetryCounter.increment();
                 publishRetryEvent(() -> new RetryOnErrorEvent(getName(), currentNumOfAttempts, throwable));
                 throw throwable;

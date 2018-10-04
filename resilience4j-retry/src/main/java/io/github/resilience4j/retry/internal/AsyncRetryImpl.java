@@ -69,7 +69,7 @@ public class AsyncRetryImpl implements AsyncRetry {
             lastException.set(throwable);
             int attempt = numOfAttempts.incrementAndGet();
 
-            if (attempt >= maxAttempts) {
+            if (attempt >= maxAttempts && maxAttempts != RetryConfig.INFINITE_ATTEMPS) {
                 failedAfterRetryCounter.increment();
                 publishRetryEvent(() -> new RetryOnErrorEvent(name, attempt, throwable));
                 return -1;

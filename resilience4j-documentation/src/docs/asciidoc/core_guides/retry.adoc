@@ -28,6 +28,16 @@ RetryConfig config = RetryConfig.custom()
     .build();
 ----
 
+Infinite retry is possible by configuring the max number of attempts to RetryConfig.UNLIMITED_ATTEMPS or using the helper methods RetryConfig.unlimitedAttemps(). Be very careful with this settings as this will really be infinite (so an infinite loop).
+
+[source,java]
+----
+// Create a Retry context with an infinite number of attemps
+RetryConfig config = RetryConfig.custom()
+    .unlimitedAttemps()
+    .build();
+----
+
 ==== Examples
 
 You can decorate any `Supplier / Runnable / Function` or `CheckedSupplier / CheckedRunnable / CheckedFunction` function with `Retry.decorateCheckedSupplier()`, `Retry.decorateCheckedRunnable()` or `Retry.decorateCheckedFunction()`.

@@ -32,6 +32,8 @@ public class RetryConfig {
     public static final IntervalFunction DEFAULT_INTERVAL_FUNCTION = (numOfAttempts) -> DEFAULT_WAIT_DURATION;
     public static final Predicate<Throwable> DEFAULT_RECORD_FAILURE_PREDICATE = (throwable) -> true;
 
+    public static final int INFINITE_ATTEMPS = -1;
+
     private int maxAttempts = DEFAULT_MAX_ATTEMPTS;
 
     private IntervalFunction intervalFunction = DEFAULT_INTERVAL_FUNCTION;
@@ -85,11 +87,15 @@ public class RetryConfig {
         private int maxAttempts = DEFAULT_MAX_ATTEMPTS;
 
         public Builder maxAttempts(int maxAttempts) {
-            if (maxAttempts < 1) {
-                throw new IllegalArgumentException("maxAttempts must be greater than or equal to 1");
+            if (maxAttempts < 1 && maxAttempts != INFINITE_ATTEMPS) {
+                throw new IllegalArgumentException("maxAttempts must be greater than or equal to 1, or equals to -1 for infinite attempts");
             }
             this.maxAttempts = maxAttempts;
             return this;
+        }
+
+        public Builder infiniteAttempts() {
+            return maxAttempts(INFINITE_ATTEMPS);
         }
 
         public Builder waitDuration(Duration waitDuration) {
